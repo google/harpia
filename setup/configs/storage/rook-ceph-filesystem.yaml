@@ -1,0 +1,72 @@
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# An example of creating a CephFS filesystem using Rook. Depends on
+# ROOK_ALLOW_MULTIPLE_FILESYSTEMS setting of your Rook operator deployment, you
+# can create one or multiple CephFS in one Ceph deployment. Remember, you can
+# set up as many Ceph deployment as you want.
+apiVersion: ceph.rook.io/v1beta1
+kind: Filesystem
+metadata:
+  name: cephfs
+  namespace: rook-ceph
+spec:
+  # The metadata pool spec
+  metadataPool:
+    replicated:
+      # Increase the replication size if you have more than one osd
+      size: 3
+  # The list of data pool specs
+  dataPools:
+    - failureDomain: osd
+      replicated:
+        size: 3
+      # If you have at least three osds, erasure coding can be specified.
+      # WARNING: Only specify erasure coding if storage type is bluestore.
+      # erasureCoded:
+      #   dataChunks: 2
+      #   codingChunks: 1
+  # The metadata service (mds) configuration
+  metadataServer:
+    # The number of active MDS instances. Ceph currently don't support
+    # multi-active MDS instances, so 1 it is.
+    activeCount: 1
+    # Whether each active MDS instance will have an active standby with a warm
+    # metadata cache for faster failover.
+    # If false, standbys will be available, but will not have a warm cache.
+    activeStandby: true
+    # The affinity rules to apply to the mds deployment
+    placement:
+    #  nodeAffinity:
+    #    requiredDuringSchedulingIgnoredDuringExecution:
+    #      nodeSelectorTerms:
+    #      - matchExpressions:
+    #        - key: role
+    #          operator: In
+    #          values:
+    #          - mds-node
+    #  tolerations:
+    #  - key: mds-node
+    #    operator: Exists
+    #  podAffinity:
+    #  podAntiAffinity:
+    resources:
+    # The requests and limits set here, allow the filesystem MDS Pod(s) to use
+    # half of one CPU core and 1 gigabyte of memory
+    #  limits:
+    #    cpu: "500m"
+    #    memory: "1024Mi"
+    #  requests:
+    #    cpu: "500m"
+    #    memory: "1024Mi"

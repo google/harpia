@@ -1,0 +1,70 @@
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cephfs-browser
+  namespace: rook-ceph
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cephfs-browser
+  template:
+    metadata:
+      labels:
+        app: cephfs-browser
+    spec:
+      containers:
+      - name: cloudcmd
+        image: coderaiser/cloudcmd:10.5.3
+        args:
+        - --auth
+        - --root=/mnt/cephfs
+        env:
+        - name: CLOUDCMD_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: cephfs-browser
+              key: username
+        - name: CLOUDCMD_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: cephfs-browser
+              key: password
+        volumeMounts:
+        - mountPath: "/mnt/cephfs"
+          name: cephfs
+      volumes:
+      - name: cephfs
+        flexVolume:
+          driver: ceph.rook.io/rook
+          fsType: ceph
+          options:
+            fsName: cephfs
+            clusterNamespace: rook-ceph
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cephfs-browser
+  namespace: rook-ceph
+spec:
+  ports:
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+  selector:
+    app: cephfs-browser

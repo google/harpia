@@ -1,0 +1,63 @@
+# Copyright 2019 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# The toolbox provides Ceph commands for tunning a specified Rook Ceph cluster.
+# Usage: https://rook.io/docs/rook/v0.8/toolbox.html
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rook-ceph-tools
+  namespace: rook-ceph
+spec:
+  dnsPolicy: ClusterFirstWithHostNet
+  containers:
+  - name: rook-ceph-tools
+    image: rook/ceph-toolbox:v0.8.1
+    imagePullPolicy: IfNotPresent
+    env:
+      - name: ROOK_ADMIN_SECRET
+        valueFrom:
+          # Secret for the specified Ceph monitor.
+          secretKeyRef:
+            name: rook-ceph-mon
+            key: admin-secret
+    securityContext:
+      privileged: true
+    volumeMounts:
+      - mountPath: /dev
+        name: dev
+      - mountPath: /sys/bus
+        name: sysbus
+      - mountPath: /lib/modules
+        name: libmodules
+      - name: mon-endpoint-volume
+        mountPath: /etc/rook
+  hostNetwork: false
+  volumes:
+    - name: dev
+      hostPath:
+        path: /dev
+    - name: sysbus
+      hostPath:
+        path: /sys/bus
+    - name: libmodules
+      hostPath:
+        path: /lib/modules
+    - name: mon-endpoint-volume
+      # The configmap of the specified Ceph cluster.
+      configMap:
+        name: rook-ceph-mon-endpoints
+        items:
+        - key: data
+          path: mon-endpoints
