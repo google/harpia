@@ -68,6 +68,12 @@ spec:
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
+        readinessProbe:
+          exec:
+            command: ["mysql", "-u", "root", "-ptest-instance-please-delete", "-e", "SELECT 1"]
+          initialDelaySeconds: 5
+          periodSeconds: 2
+          timeoutSeconds: 1
       volumes:
       - name: mysql-persistent-storage
         persistentVolumeClaim:
