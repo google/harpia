@@ -37,6 +37,9 @@ kubectl apply -f $TMP_DIR/calico/rbac-kdd.yaml --kubeconfig="/etc/kubernetes/adm
 # Start a nginx ingress controller.
 kubectl apply -f $TMP_DIR/configs/ingress-nginx-controller.yaml --kubeconfig="/etc/kubernetes/admin.conf"
 
+# Install GPU device plugin daemonset.
+kubectl apply -f $TMP_DIR/configs/gpu/nvidia-device-plugin-daemonset.yaml --kubeconfig="/etc/kubernetes/admin.conf"
+
 # Setup Ceph with rook
 # Before running those command, make sure the storage device configuration in rook-ceph-cluster.yaml is correct.
 kubectl create -f $TMP_DIR/configs/storage/rook-ceph-operator.yaml --kubeconfig="/etc/kubernetes/admin.conf"

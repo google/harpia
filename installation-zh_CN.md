@@ -74,6 +74,19 @@ Harpia 是一个完整的 Kubernetes 集群安装包，包含了 Kubernetes 集�
 
   3. 在 master 上运行 `kubectl get nodes`，所有已加入的 node 都应该显示 `Ready`。
 
+### 安装 NVIDIA GPU 节点
+
+请从 [NVIDIA 官网](https://www.nvidia.com/Download/index.aspx)下载 GPU 驱动，并在所有
+GPU 节点上安装。安装后可能需要重启 GPU 节点。
+
+Harpia 的安装过程中已部署了名为 `nvidia-gpu-device-plugin` 的 DaemonSet，用于向 Kubernetes 报告
+GPU 状态。请为所有具有 NVIDIA GPU 的节点打上 `nvidia.com/gpu` 标签：
+```shell
+$ kubectl label node <node> nvidia.com/gpu=true
+```
+
+之后这些节点会自动运行这个插件，并可以被调度需要 GPU 的工作负载。
+
 ## 疑难解答
 
 To be added.
