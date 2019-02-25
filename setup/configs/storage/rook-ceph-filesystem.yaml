@@ -12,12 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# An example of creating a CephFS filesystem using Rook. Depends on
-# ROOK_ALLOW_MULTIPLE_FILESYSTEMS setting of your Rook operator deployment, you
-# can create one or multiple CephFS in one Ceph deployment. Remember, you can
-# set up as many Ceph deployment as you want.
-apiVersion: ceph.rook.io/v1beta1
-kind: Filesystem
+# This file is adapted from cluster/examples/kubernetes/ceph/filesystem.yaml in https://github.com/rook/rook.
+apiVersion: ceph.rook.io/v1
+kind: CephFilesystem
 metadata:
   name: cephfs
   namespace: rook-ceph
@@ -29,21 +26,14 @@ spec:
       size: 3
   # The list of data pool specs
   dataPools:
-    - failureDomain: osd
+    - failureDomain: host
       replicated:
         size: 3
-      # If you have at least three osds, erasure coding can be specified.
-      # WARNING: Only specify erasure coding if storage type is bluestore.
-      # erasureCoded:
-      #   dataChunks: 2
-      #   codingChunks: 1
   # The metadata service (mds) configuration
   metadataServer:
-    # The number of active MDS instances. Ceph currently don't support
-    # multi-active MDS instances, so 1 it is.
+    # The number of active MDS instances
     activeCount: 1
-    # Whether each active MDS instance will have an active standby with a warm
-    # metadata cache for faster failover.
+    # Whether each active MDS instance will have an active standby with a warm metadata cache for faster failover.
     # If false, standbys will be available, but will not have a warm cache.
     activeStandby: true
     # The affinity rules to apply to the mds deployment
@@ -62,8 +52,7 @@ spec:
     #  podAffinity:
     #  podAntiAffinity:
     resources:
-    # The requests and limits set here, allow the filesystem MDS Pod(s) to use
-    # half of one CPU core and 1 gigabyte of memory
+    # The requests and limits set here, allow the filesystem MDS Pod(s) to use half of one CPU core and 1 gigabyte of memory
     #  limits:
     #    cpu: "500m"
     #    memory: "1024Mi"

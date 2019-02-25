@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
       - name: cloudcmd
-        image: coderaiser/cloudcmd:10.5.3
+        image: coderaiser/cloudcmd:11.8.5
         args:
         - --auth
         - --root=/mnt/cephfs

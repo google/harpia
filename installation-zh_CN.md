@@ -30,13 +30,15 @@ Harpia 是一套完整的 Kubernetes 集群安装与管理方案，包含了 Kub
 
 ### 修改配置
 
-安装脚本使用 [rook](https://rook.io/) 来配置 [Ceph](https://ceph.com/)。Ceph 将每台 Kubernetes node
-上的物理硬盘组合成一个分布式文件系统。我们在配置文件 [`rook-ceph-cluster.yaml`](https://github.com/google/harpia/blob/master/setup/configs/storage/rook-ceph-cluster.yaml)
-中设置 `deviceFilter`，
-将物理硬盘分配给 Ceph 使用。配置文件中的注释解释了如何设置全局和单个 Kubernetes node 的 `deviceFilter`。详细信息请参考
-[rook 配置文档](https://github.com/rook/rook/blob/master/Documentation/ceph-cluster-crd.md#storage-selection-settings)。
+安装脚本使用 [Rook](https://rook.io/) 来配置 [Ceph](https://ceph.com/) 分布式存储系统。
+Ceph 将集群中可用的物理磁盘组合在一起，提供一个分布式文件系统。
 
-***在安装过程中，分配给 Ceph 的硬盘会被格式化，原有数据会被删除。***请确保设置了正确的 `deviceFilter`。
+为了指定 Ceph 所使用的物理磁盘，您必须修改配置文件 [`rook-ceph-cluster.yaml`](https://github.com/google/harpia/blob/master/setup/configs/storage/rook-ceph-cluster.yaml)
+中的 `deviceFilter` 选项。配置文件中的注释解释了如何设置全局的或每个节点分别的 `deviceFilter`。详细信息请参考
+[Rook 配置文档](https://rook.io/docs/rook/v0.9/ceph-cluster-crd.html#storage-selection-settings)。
+
+在安装过程前，请确保您为 Ceph 所分配的磁盘不含有任何数据，分区或分区表。如果您分配的磁盘中已含有数据，
+请运行 `sudo wipefs -a /dev/sdx` 命令，清空相应磁盘。**在此过程中，原有数据会被删除。**
 
 ### 运行安装脚本
 
