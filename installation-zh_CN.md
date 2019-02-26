@@ -1,43 +1,32 @@
 Harpia 使用说明
 ==================
 
-Harpia 是一个完整的 Kubernetes 集群安装包，包含了 Kubernetes 集群的网络、Ingress、存储以及监控的基本配置。
+Harpia 是一套完整的 Kubernetes 集群安装与管理方案，包含了 Kubernetes 集群的运行时、网络、存储以及监控的基本配置。
 
-## 准备工作
+## 先决条件
 
-完成集群配置需要对 Kubernetes 和 Linux 有基本了解。
+完成集群的安装与配置，需要您对 Kubernetes、Linux 以及 YAML 有基本了解。
 
-### 操作系统:
+### 节点
 
-在运行任何脚本之前，请在集群的每台设备上安装好 Ubuntu 16.04 Xenial Xerus。尚未测试其他操作系统和版本。
+您需要至少一台拥有完全控制权的物理机或虚拟机来搭建 Kubernetes 集群。为了保障服务的可靠性与可扩展性，
+建议您至少准备三台机器作为 Kubernetes **主节点**，一台以上机器作为**计算节点**。
+
+您还需要单独的一台计算机作为安装时的**控制节点**，通常您的 Linux 工作站就可以胜任。
+
+<!-- TODO(yfcheng) 机器硬件需求与推荐。 -->
+
+如果您无法获得所需的资源，建议您选用 [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/)，
+[Tencent Kubernetes Engine](https://intl.cloud.tencent.com/product/tke) 等云端 Kubernetes 解决方案。
 
 ### 网络
 
-所有设备相互之间应该互通。安装与测试阶段需要每台设备都有公网连接，以便下载软件包和 Docker image。推荐在网络层进行安全加固，除了从特殊网段 SSH 之外，禁用从外网发起的连接。远程调整网络配置有风险，请谨慎操作。
+所有节点相互之间应该能够在三层互通。安装与测试阶段需要每台节点都可以访问 Internet，以便下载软件包和容器镜像。
+目前尚不支持离线安装。
 
-### SSH
-
-确保所有的设备都可以通过 SSH 访问。安装过程中可能会需要重复 SSH 到不同的设备，推荐在所有机器上设置好 ssh-key 并禁用 root 远程登录。请参考相关的 [Ubuntu 文档](https://help.ubuntu.com/lts/serverguide/openssh-server.html.en#openssh-keys)。
-
-## 软件和软件源
-
-安装脚本会将[阿里云的 Kubernetes软件源](https://mirrors.aliyun.com/kubernetes/)和
-[清华大学的 Docker CE 软件源](https://mirrors.tuna.tsinghua.edu.cn/docker-ce/)加入系统设置，并安装以下软件的特定版本及其依赖:
- `docker`，`kubeadm`, `kubectl`, `kubelet`。
-
-每台 Kubernetes node 上的 Docker 源将会被修改为 [Docker 中国镜像](https://docker-cn.com)。
-
-在搭建 Kubernetes 集群的过程中会下载以下 Docker image:
-`calico`, `nginx`，`rook/ceph`。
-
-在测试过程中会使用以下 Docker image:
-`mysql`, `cloudcmd`, `rook/ceph-toolbox`。
-
-## 安装
-
-### 获取脚本
-
-	$ git clone --branch stable https://github.com/google/harpia.git
+安装程序可以在中国网络环境中工作。安装过程中使用的软件源包括[清华大学开源软件镜像](https://mirrors.tuna.tsinghua.edu.cn/)、
+[中科大开源软件镜像](http://mirrors.ustc.edu.cn/)、[Docker CN](https://registry.docker-cn.com)
+和 [Nvidia 中国](https://cn.download.nvidia.com/)等。
 
 ### 修改配置
 
