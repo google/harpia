@@ -94,6 +94,9 @@ To be added.
 该脚本将分别测试 `Cephfs` 和 `Ceph Block Device (rbd)`。除此之外还可以使用 `rook/ceph-toolbox` 来手动检查 Ceph 的状态。如果要手动检查，请参考 [rook 文档](https://github.com/rook/rook/blob/master/Documentation/ceph-toolbox.md)。
 相关的配置文件有 [verification/configs/storage/rook-ceph-toolbox.yaml](https://github.com/google/harpia/blob/master/verification/configs/storage/rook-ceph-toolbox.yaml)。
 
+如需测试 CephFS 与 RBD 的性能，请运行 `verification/rook-ceph-benchmark.sh` 。
+对于千兆以太网互联的集群，期望顺序读取速度在 130MiB/s 或以上。
+
 ### Pod 互联网络
 
 请运行 `verification/iperf3.sh` 来测试 Pod 间的互联网络性能。对于千兆以太网，期望性能应在
