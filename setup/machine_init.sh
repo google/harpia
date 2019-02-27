@@ -25,7 +25,7 @@ TMP_DIR="/tmp/k8s-setup"
 # TODO(ditsing): how?
 
 # Install all necessary packages.
-bash ./install_debs.sh
+bash "$TMP_DIR/setup/install_debs.sh"
 
 # Update docker config.
 mkdir -p /etc/docker
