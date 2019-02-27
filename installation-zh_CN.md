@@ -44,22 +44,22 @@ Harpia 是一套完整的 Kubernetes 集群安装与管理方案，包含了 Kub
 
   1. 复制代码到每台设备上
 
-		$ scp -r harpia/ remote.host:/tmp/
+         $ scp -r harpia/ remote.host:/tmp/
 
   3. 选择一台设备作为主节点（master)，在该设备上运行 `machine_init.sh` 和 `k8s_master_init.sh`
 
-		$ ssh <the master host>
-		master$ bash /tmp/harpia/machine_init.sh
-		master$ bash /tmp/harpia/k8s_master_init.sh
+         $ ssh <the master host>
+         master$ bash /tmp/harpia/machine_init.sh
+         master$ bash /tmp/harpia/k8s_master_init.sh
 
-	脚本运行完毕之后，可以用 `kubectl get cs` 来验证安装完成。
+     脚本运行完毕之后，可以用 `kubectl get cs` 来验证安装完成。
 
   2. 在其他设备上运行 `machine_init.sh`
 
-		$ ssh <all other hosts>
-		node $ bash /tmp/harpia/machine_init.sh
+         $ ssh <all other hosts>
+         node $ bash /tmp/harpia/machine_init.sh
 
-	之后在 ***master*** 上运行 `kubeadm token create --print-join-command`，并将输出的 `kubeadm join` 命令复制到 node 设备上运行。每台 node 设备需要生成单独的 `token`。
+     之后在 ***master*** 上运行 `kubeadm token create --print-join-command`，并将输出的 `kubeadm join` 命令复制到 node 设备上运行。每台 node 设备需要生成单独的 `token`。
 
   3. 在 master 上运行 `kubectl get nodes`，所有已加入的 node 都应该显示 `Ready`。
 
@@ -70,6 +70,7 @@ GPU 节点上安装。安装后可能需要重启 GPU 节点。
 
 Harpia 的安装过程中已部署了名为 `nvidia-gpu-device-plugin` 的 DaemonSet，用于向 Kubernetes 报告
 GPU 状态。请为所有具有 NVIDIA GPU 的节点打上 `nvidia.com/gpu` 标签：
+
 ```shell
 $ kubectl label node <node> nvidia.com/gpu=true
 ```
@@ -86,7 +87,7 @@ To be added.
 
 我们提供了脚本来检查存储系统是否可用。在 master 上运行
 
-	$ bash verification/rook-ceph.sh
+    $ bash verification/rook-ceph.sh
 
 该脚本将分别测试 `Cephfs` 和 `Ceph Block Device (rbd)`。除此之外还可以使用 `rook/ceph-toolbox` 来手动检查 Ceph 的状态。如果要手动检查，请参考 [rook 文档](https://github.com/rook/rook/blob/master/Documentation/ceph-toolbox.md)。
 相关的配置文件有 [verification/configs/storage/rook-ceph-toolbox.yaml](https://github.com/google/harpia/blob/master/verification/configs/storage/rook-ceph-toolbox.yaml)。
