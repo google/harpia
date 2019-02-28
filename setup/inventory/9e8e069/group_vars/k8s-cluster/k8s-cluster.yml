@@ -217,6 +217,7 @@ nvidia_driver_install_ubuntu_container: "{{ kube_image_repo }}/ubuntu-nvidia-dri
 nvidia_gpu_device_plugin_container: "{{ kube_image_repo }}/nvidia-gpu-device-plugin@sha256:0842734032018be107fa2490c98156992911e3e1f2a21e059ff0105b07dd8e9e"
 
 ## Use in-China mirrors for container images.
+# gcr.io images
 pod_infra_image_repo: "{{ kube_image_repo }}/pause-{{ image_arch }}"
 kubedns_image_repo: "{{ kube_image_repo }}/k8s-dns-kube-dns-{{ image_arch }}"
 nodelocaldns_image_repo: "{{ kube_image_repo }}/k8s-dns-node-cache"
@@ -229,6 +230,22 @@ registry_proxy_image_repo: "{{ kube_image_repo }}/kube-registry-proxy"
 metrics_server_image_repo: "{{ kube_image_repo }}/metrics-server-amd64"
 addon_resizer_image_repo: "{{ kube_image_repo }}/addon-resizer"
 dashboard_image_repo: "{{ kube_image_repo }}/kubernetes-dashboard-{{ image_arch }}"
+
+# quay.io images
+quay_io_mirror: "quay.mirrors.ustc.edu.cn"
+etcd_image_repo: "{{ quay_io_mirror }}/coreos/etcd"
+flannel_image_repo: "{{ quay_io_mirror }}/coreos/flannel"
+flannel_cni_image_repo: "{{ quay_io_mirror }}/coreos/flannel-cni"
+calicoctl_image_repo: "{{ quay_io_mirror }}/calico/ctl"
+calico_node_image_repo: "{{ quay_io_mirror }}/calico/node"
+calico_cni_image_repo: "{{ quay_io_mirror }}/calico/cni"
+calico_policy_image_repo: "{{ quay_io_mirror }}/calico/kube-controllers"
+calico_rr_image_repo: "{{ quay_io_mirror }}/calico/routereflector"
+netcheck_agent_image_repo: "{{ quay_io_mirror }}/l23network/k8s-netchecker-agent"
+netcheck_server_image_repo: "{{ quay_io_mirror }}/l23network/k8s-netchecker-server"
+local_volume_provisioner_image_repo: "{{ quay_io_mirror }}/external_storage/local-volume-provisioner"
+cephfs_provisioner_image_repo: "{{ quay_io_mirror }}/external_storage/cephfs-provisioner"
+cert_manager_controller_image_repo: "{{ quay_io_mirror }}/jetstack/cert-manager-controller"
 
 ## Use in-China mirrors for NVIDIA GPU driver.
 nvidia_gpu_tesla_base_url: https://cn.download.nvidia.com/tesla/
