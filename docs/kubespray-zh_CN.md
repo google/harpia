@@ -61,8 +61,8 @@ released.
 
 在控制节点上，下载 Harpia 与 Kubespray 源代码到本地：
 ```shell
-$ curl -LO https://github.com/kubernetes-sigs/kubespray/archive/v2.8.3.tar.gz
-$ tar xvzf v2.8.3.tar.gz && mv kubespray-2.8.3 kubespray
+$ git clone https://github.com/kubernetes-sigs/kubespray.git
+$ (cd kubespray; git checkout 9e8e069)
 $ git clone https://github.com/google/harpia.git
 ```
 
@@ -74,11 +74,9 @@ kubespray $ pip install --user -r requirements.txt -i https://pypi.tuna.tsinghua
 
 ### 配置 Kubespray
 
-复制 Kubespray 的样例配置目录 `sample`，命名为 `harpia`。然后为新的配置目录应用 Harpia
-中的补丁 `setup/kubespray-inventory-2.8.3.patch`：
+复制 Harpia 的样例配置目录 `setup/inventory/9e8e069` 到 Kubespray 的 `inventory/harpia`：
 ```shell
-kubespray $ cp -rfp inventory/sample inventory/harpia
-kubespray $ patch -p0 < ../harpia/setup/kubespray-inventory-2.8.3.patch
+kubespray $ cp -rfp ../harpia/setup/inventory/9e8e069 inventory/harpia
 ```
 
 将所有节点信息填入 `inventory/harpia/hosts.ini`，这包括节点地址、名称、角色（是否为主节点）等。
