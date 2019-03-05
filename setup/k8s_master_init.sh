@@ -37,6 +37,9 @@ kubectl apply -f $TMP_DIR/calico/rbac-kdd.yaml --kubeconfig="/etc/kubernetes/adm
 # Start a nginx ingress controller.
 kubectl apply -f $TMP_DIR/configs/ingress-nginx-controller.yaml --kubeconfig="/etc/kubernetes/admin.conf"
 
+# Deploy ingress for kubernetes-dashboard.
+kubectl apply -f $TMP_DIR/configs/dashboard-ingress.yaml --kubeconfig="/etc/kubernetes/admin.conf"
+
 # Install GPU device plugin daemonset.
 kubectl apply -f $TMP_DIR/configs/gpu/nvidia-device-plugin-daemonset.yaml --kubeconfig="/etc/kubernetes/admin.conf"
 

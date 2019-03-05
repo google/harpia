@@ -56,8 +56,8 @@ cephfs_provisioner_enabled: false
 # cephfs_provisioner_deterministic_names: true
 
 # Nginx ingress controller deployment
-ingress_nginx_enabled: false
-# ingress_nginx_host_network: false
+ingress_nginx_enabled: true
+ingress_nginx_host_network: true
 # ingress_nginx_nodeselector:
 #   node-role.kubernetes.io/node: ""
 # ingress_nginx_tolerations:
