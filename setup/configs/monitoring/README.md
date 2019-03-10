@@ -1,0 +1,1 @@
+All files are adapted from configs in [the kube-prometheus sub-project of the prometheus-operator project](http://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus/manifests) 。

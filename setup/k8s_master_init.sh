@@ -49,3 +49,12 @@ kubectl create -f $TMP_DIR/configs/storage/rook-ceph-operator.yaml --kubeconfig=
 kubectl create -f $TMP_DIR/configs/storage/rook-ceph-cluster.yaml --kubeconfig="/etc/kubernetes/admin.conf"
 kubectl create -f $TMP_DIR/configs/storage/rook-ceph-rbd.yaml --kubeconfig="/etc/kubernetes/admin.conf"
 kubectl create -f $TMP_DIR/configs/storage/rook-ceph-filesystem.yaml --kubeconfig="/etc/kubernetes/admin.conf"
+
+# Setup monitoring for the cluster itself.
+kubectl apply -f $TMP_DIR/setup/configs/monitoring/namespace.yaml
+kubectl apply -f $TMP_DIR/setup/configs/monitoring/prometheus-operator/
+kubectl wait --for=condition=available deployment/prometheus-operator --timeout=120s
+kubectl apply -f $TMP_DIR/setup/configs/monitoring/node-exporter/
+kubectl apply -f $TMP_DIR/setup/configs/monitoring/kube-state-metrics/
+kubectl apply -f $TMP_DIR/setup/configs/monitoring/prometheus/
+kubectl apply -f $TMP_DIR/setup/configs/monitoring/grafana/
