@@ -28,7 +28,7 @@ Harpia 是一套完整的 Kubernetes 集群安装与管理方案，包含了 Kub
 [中科大开源软件镜像](http://mirrors.ustc.edu.cn/)、[Docker CN](https://registry.docker-cn.com)
 和 [Nvidia 中国](https://cn.download.nvidia.com/)等。
 
-### 修改配置
+## 修改配置
 
 安装脚本使用 [Rook](https://rook.io/) 来配置 [Ceph](https://ceph.com/) 分布式存储系统。
 Ceph 将集群中可用的物理磁盘组合在一起，提供一个分布式文件系统。
@@ -40,7 +40,7 @@ Ceph 将集群中可用的物理磁盘组合在一起，提供一个分布式文
 在安装过程前，请确保您为 Ceph 所分配的磁盘不含有任何数据，分区或分区表。如果您分配的磁盘中已含有数据，
 请运行 `sudo wipefs -a /dev/sdx` 命令，清空相应磁盘。**在此过程中，原有数据会被删除。**
 
-### 运行安装脚本
+## 运行安装脚本
 
 ***请务必完成配置之后再运行脚本***
 
@@ -48,7 +48,7 @@ Ceph 将集群中可用的物理磁盘组合在一起，提供一个分布式文
 
          $ scp -r harpia/ remote.host:/tmp/
 
-  3. 选择一台设备作为主节点（master)，在该设备上运行 `machine_init.sh` 和 `k8s_master_init.sh`
+  1. 选择一台设备作为主节点（master)，在该设备上运行 `machine_init.sh` 和 `k8s_master_init.sh`
 
          $ ssh <the master host>
          master$ bash /tmp/harpia/machine_init.sh
@@ -56,16 +56,16 @@ Ceph 将集群中可用的物理磁盘组合在一起，提供一个分布式文
 
      脚本运行完毕之后，可以用 `kubectl get cs` 来验证安装完成。
 
-  2. 在其他设备上运行 `machine_init.sh`
+  1. 在其他设备上运行 `machine_init.sh`
 
          $ ssh <all other hosts>
          node $ bash /tmp/harpia/machine_init.sh
 
      之后在 ***master*** 上运行 `kubeadm token create --print-join-command`，并将输出的 `kubeadm join` 命令复制到 node 设备上运行。每台 node 设备需要生成单独的 `token`。
 
-  3. 在 master 上运行 `kubectl get nodes`，所有已加入的 node 都应该显示 `Ready`。
+  1. 在 master 上运行 `kubectl get nodes`，所有已加入的 node 都应该显示 `Ready`。
 
-### 安装 NVIDIA GPU 节点
+## 安装 NVIDIA GPU 节点
 
 请从 [NVIDIA 官网](https://www.nvidia.com/Download/index.aspx)下载 GPU 驱动，并在所有
 GPU 节点上安装。安装后可能需要重启 GPU 节点。
@@ -91,7 +91,7 @@ To be added.
 
     $ bash verification/rook-ceph.sh
 
-该脚本将分别测试 `Cephfs` 和 `Ceph Block Device (rbd)`。除此之外还可以使用 `rook/ceph-toolbox` 来手动检查 Ceph 的状态。如果要手动检查，请参考 [rook 文档](https://github.com/rook/rook/blob/master/Documentation/ceph-toolbox.md)。
+该脚本将分别测试 `CephFs` 和 `Ceph Block Device (rbd)`。除此之外还可以使用 `rook/ceph-toolbox` 来手动检查 Ceph 的状态。如果要手动检查，请参考 [rook 文档](https://github.com/rook/rook/blob/master/Documentation/ceph-toolbox.md)。
 相关的配置文件有 [verification/configs/storage/rook-ceph-toolbox.yaml](https://github.com/google/harpia/blob/master/verification/configs/storage/rook-ceph-toolbox.yaml)。
 
 如需测试 CephFS 与 RBD 的性能，请运行 `verification/rook-ceph-benchmark.sh` 。
